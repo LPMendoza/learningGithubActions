@@ -1,14 +1,30 @@
 name: Actions Workflow
 
 on:
-  repository_dispatch:
-    types: [build]
-  # schedule:
-  #   - cron: "0/5 * * * *"
-  #   - cron: "0/6 * * * *"
-  # push:
+  push:
+    branches:
+      - master
+      - 'feature/*' # matches feature/whatEverYouWant, but don't feature/a/b
+      - 'feature/**' # matches feature/whatEverYouWant/otherThing
+      - '!feature/featC' # Will ignore this branches
+    tags: # Run in this tags
+      - v1.*
+    paths: # Will execute when pushing a file with this extension (There is also tghe paths-ignore version)
+      - '**.js'
+      - '!filename.js'
+
   pull_request:
-    types: [closed, assigned, opened, reopened]
+    branches:
+      - master
+
+  # repository_dispatch:
+  #   types: [build]
+  # # schedule:
+  # #   - cron: "0/5 * * * *"
+  # #   - cron: "0/6 * * * *"
+  # # push:
+  # pull_request:
+  #   types: [closed, assigned, opened, reopened]
 
 jobs:
   run-github-actions:
