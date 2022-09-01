@@ -3,12 +3,31 @@ on: push
 
 jobs:
   node-version:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        node_version: [6,8,10]
+        include: # Add new variables in the matrix if the params match with the current matrix value in the job
+          - os: ubuntu-latest
+            node_version: 8
+            is_ubuntu_8: "true" # this variable is added if the os is "ubuntu-lates" and node_version is "8"
+        exclude:
+          - os: ubuntu-latest
+            node_version: 6
+          - os: macos-latest
+            node_version: 8
+      # fail-fast: true - if one run fails all the jobs will stop
+      # max-parallel: 2 - Number of jobs that can run parallely
+    runs-on: ${{ matrix.os }}
+    env:
+      IS_UBUNTU_8: ${{ matrix.is_ubuntu_8 }}
     steps:
       - name: Log node version
         run: node -v
       - uses: actions/setup-node@v1
         with:
-          node-version: 6
+          node-version: ${{ matrix.node_version }}
       - name: Log node version
         run: node -v
+      - name: Is Ubuntu 8
+        run: echo $IS_UBUNTU_8
