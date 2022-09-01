@@ -6,6 +6,8 @@ jobs:
     steps:
       - name: echo a string
         run: echo "Hello World"
+        # timeout-minutes: 360 - max amount of minutes that the process can long
+        # continue-on-error: true - continue with the other steps even if the past has failed
       - name: multiline script
         run: |
           node -v
